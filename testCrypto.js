@@ -24,7 +24,8 @@ console.log(bodyStr);
 var msgNode = digestUtil.generate(headNode, bodyStr);
 console.log(msgNode);*/
 
-var text = '{code:"0000", description:"系统处理成功"}';
+var bodyNode = {code:"0000", description:"系统处理成功"};
+var text = JSON.stringify(bodyNode);
 var key = "c9k/MfwCp3223C6AOeRmY0YuwxyD81f8";
 console.log("str:" + text);
 
