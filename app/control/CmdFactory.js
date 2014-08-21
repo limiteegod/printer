@@ -5,9 +5,11 @@ var CmdFactory = function(){};
 
 CmdFactory.prototype.handle = function(headNode, bodyStr, cb)
 {
-    var decodedBodyStr = digestUtil.check(headNode, bodyStr);
+
     var cmdGroup = headNode.cmd.match(/[A-Z]+/);
-    var backBodyNode = {};
+
+    var decodedBodyStr = digestUtil.check(headNode, bodyStr);
+    console.log("decoded body:" + decodedBodyStr);
     //用户登录
     if(cmdGroup[0] == "A")
     {
