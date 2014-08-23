@@ -30,6 +30,29 @@ app.get('/', function(req, res){
     });
 });
 
+app.get('/:name', function(req, res, next){
+    var path = req.params.name.match(/^([a-zA-Z0-9_]+)(\.html)$/);
+    if(path)
+    {
+        var jadePathArray = path[1].split("_");
+        var jadePath = jadePathArray.join("/");
+        res.render(jadePath, {
+            title: 'login',
+            youAreUsingJade:true
+        });
+    }
+    else
+    {
+        res.json({code:"OK"});
+        //next();
+    }
+
+    /*res.render('index', {
+        title: 'Express',
+        youAreUsingJade:true
+    });*/
+});
+
 app.post("/main/interface.htm", function(req, res){
     var message = req.body.message;
     console.log(message);

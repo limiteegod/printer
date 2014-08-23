@@ -14,6 +14,7 @@ var msgNode = digestUtil.generate(headNode, bodyStr);
 
 console.log(msgNode);
 
+msgNode.head.digest = headNode.digest;
 cmdFactory.handle(msgNode.head, msgNode.body, function(err, msgNode){
     console.log(msgNode);
 });
