@@ -16,7 +16,7 @@ app.use(app.router);
 app.use(express.static(__dirname + '/public'));
 
 app.configure('development', function(){
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
 });
 
 app.configure('production', function(){
@@ -43,14 +43,8 @@ app.get('/:name', function(req, res, next){
     }
     else
     {
-        res.json({code:"OK"});
-        //next();
+        next();
     }
-
-    /*res.render('index', {
-        title: 'Express',
-        youAreUsingJade:true
-    });*/
 });
 
 app.post("/main/interface.htm", function(req, res){
