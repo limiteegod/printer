@@ -1,0 +1,28 @@
+doctype html
+html(lang="en")
+    head
+        title= title
+        script(type='text/javascript', src='./cryptojs/rollups/tripledes.js')
+        script(type='text/javascript', src='./cryptojs/components/mode-cfb-min.js')
+        script(type='text/javascript', src='./cryptojs/components/pad-nopadding-min.js')
+        script(type='text/javascript').
+            var key = CryptoJS.enc.Base64.parse('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+            var iv  = CryptoJS.enc.Base64.parse('AAAAAAAAAAA=');
+
+            var encrypted = CryptoJS.TripleDES.encrypt('{"code":"0000","description":"系统处理成功"}', key, {iv:iv, mode:CryptoJS.mode.CFB, padding: CryptoJS.pad.NoPadding});
+            alert(encrypted);
+            var decrypted = CryptoJS.TripleDES.decrypt(encrypted, key, {iv:iv, mode:CryptoJS.mode.CFB, padding: CryptoJS.pad.NoPadding});
+            alert(decrypted.toString(CryptoJS.enc.Utf8));
+        link(rel='stylesheet', type='text/css', href='./css/site.css')
+    body
+        h1 Jade - node template engine
+        #container.col
+            if youAreUsingJade
+                p You are amazing
+            else
+                p Get on it!
+            p.
+              Jade is a terse and simple
+              templating language with a
+              strong focus on performance
+              and powerful features.
