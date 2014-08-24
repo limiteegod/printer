@@ -126,6 +126,7 @@ async.waterfall([
         var cmdTable = db.get("cmd");
         cmdTable.save({"code":"A01", "des":"用户登录"});
         cmdTable.save({"code":"A02", "des":"用户查询"});
+        cmdTable.save({"code":"admin/login", des:"manager login page"});
         cb(null, typedata);
     },
     //角色可用cmd码对应表

@@ -105,3 +105,11 @@ CurSite.arrayCopyAndExclude = function(data, index)
     }
     return newArray;
 };
+/**
+ * get cookie by name
+ * @param name
+ */
+CurSite.getCookie = function(name)
+{
+    alert(document.cookie);
+};

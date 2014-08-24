@@ -1,5 +1,6 @@
 var express = require('express'), app = express();
 var cmdFactory = require("./app/control/CmdFactory.js");
+var pageControl = require("./app/control/PageControl.js");
 
 app.use(express.logger());
 
@@ -36,9 +37,11 @@ app.get('/:name', function(req, res, next){
     {
         var jadePathArray = path[1].split("_");
         var jadePath = jadePathArray.join("/");
-        res.render(jadePath, {
-            title: 'login',
-            youAreUsingJade:true
+        var headNode = {cmd:jadePath};
+        pageControl.handle(headNode, req.query, function(err, data){
+            if(err) throw err;
+            console.log(data);
+            res.render(jadePath, data);
         });
     }
     else
@@ -58,4 +61,4 @@ app.post("/main/interface.htm", function(req, res){
     res.json(msgNode);
 });
 
-app.listen(80);
+app.listen(8081);

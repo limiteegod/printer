@@ -3,22 +3,45 @@ html(lang="en")
     head
         include ../includes/script.jade
         script(type='text/javascript').
+            KISSY.use("io,node,json", function(S, Io, Node, Json){
+                    Node.one("#submit").on("click", function(){
+                    var name = Node.one("#name").val();
+                    var pwd = Node.one("#pwd").val();
+                    var body = {name:name, password:pwd, uniqueId:CurSite.createUUID()};
+                    alert(CurSite.getCookie("digest"));
+                    Io({type:"post", url:CurSite.interPath, data:{cmd:"AD01", body:Json.stringify(body)}, success:function(data){
+                        if(data.repCode == "0000")
+                        {
+                            window.location = CurSite.getAbsolutePath("pages/admin/index.html");
+                        }
+                        else
+                        {
+                            alert(body.description);
+                        }
+                    }});
+                });
+            });
+            /*
             var key = CryptoJS.enc.Base64.parse('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
             var iv  = CryptoJS.enc.Base64.parse('AAAAAAAAAAA=');
 
             var encrypted = CryptoJS.TripleDES.encrypt('{"code":"0000","description":"系统处理成功"}', key, {iv:iv, mode:CryptoJS.mode.CFB, padding: CryptoJS.pad.NoPadding});
             alert(encrypted);
             var decrypted = CryptoJS.TripleDES.decrypt(encrypted, key, {iv:iv, mode:CryptoJS.mode.CFB, padding: CryptoJS.pad.NoPadding});
-            alert(decrypted.toString(CryptoJS.enc.Utf8));
+            alert(decrypted.toString(CryptoJS.enc.Utf8));*/
     body
         h1 Jade - node template engine
-        #container.col
-            if youAreUsingJade
-                p You are amazing
-            else
-                p Get on it!
-            p.
-              Jade is a terse and simple
-              templating language with a
-              strong focus on performance
-              and powerful features.
+        #container.container
+            table
+                tr
+                    td.
+                       name:
+                    td
+                        input(type='text', id='name')
+                tr
+                    td.
+                       password:
+                    td
+                        input(type='password', id='pwd')
+        #controlButton.container
+            input(id='submit', type="button", value='submit')
