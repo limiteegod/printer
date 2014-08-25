@@ -1,6 +1,8 @@
 var express = require('express'), app = express();
 var cmdFactory = require("./app/control/CmdFactory.js");
 var pageControl = require("./app/control/PageControl.js");
+var errCode = require("./app/config/ErrCode.js");
+
 
 app.use(express.logger());
 
@@ -57,8 +59,14 @@ app.post("/main/interface.htm", function(req, res){
     var headNode = msgNode.head;
     var bodyStr = msgNode.body;
     console.log(bodyStr);
-    var msgNode = cmdFactory.handle(headNode, bodyStr);
-    res.json(msgNode);
+    cmdFactory.handle(headNode, bodyStr, function(err, bodyNode){
+        if(bodyNode.code == undefined)
+        {
+            bodyNode.code = errCode.E0000.code;
+            bodyNode.description = errCode.E0000.description;
+        }
+        res.json(bodyNode);
+    });
 });
 
 app.listen(9080);

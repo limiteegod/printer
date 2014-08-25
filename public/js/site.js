@@ -137,7 +137,6 @@ CurSite.encrypt = function(headNode, key, bodyStr)
     var arrayKey = CryptoJS.enc.Base64.parse(key);
     var iv  = CryptoJS.enc.Base64.parse(CurSite.getDefaultIv());
     var encrypted = CryptoJS.TripleDES.encrypt(bodyStr, arrayKey, {iv:iv, mode:CryptoJS.mode.CFB, padding: CryptoJS.pad.NoPadding}) + "";
-    alert(encrypted);
     return {head:headNode, body:encrypted};
 };
 

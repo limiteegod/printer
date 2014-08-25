@@ -10,7 +10,7 @@ InitDatabase.prototype.saveUserType = function(data, outerCb){
     var rstArray = new Array();
     async.each(data, function(row, callback) {
         userTypeTable.save(row, function(rows, data){
-            rstArray[data.code] = rows.insertId;
+            rstArray[data.code] = data._id;
             callback();
         });
     }, function(err){
@@ -96,7 +96,9 @@ async.waterfall([
     },
     //保存用户类型
     function(opdata, cb) {
-        var userTypeList = [{"name":"游客", "code":"guest"}, {"name":"用户", "code":"user"}, {"name":"管理员", "code":"manager"}];
+        var userTypeList = [{"name":"游客", "code":"guest", "_id":"guest"},
+            {"name":"用户", "code":"user", "_id":"user"},
+            {"name":"管理员", "code":"manager", "_id":"manager"}];
         init.saveUserType(userTypeList, function(data){
             cb(null, opdata, data);
         });
@@ -116,8 +118,8 @@ async.waterfall([
     //保存用户
     function(typedata, cb){
         var userTable = db.get("user");
-        userTable.save({"name":"admin", "password":"123456", "typeId":typedata["manager"]});
-        userTable.save({"name":"liming", "password":"123456", "typeId":typedata["user"]});
+        userTable.save({"name":"admin", "password":"123456", "userTypeId":typedata["manager"]});
+        userTable.save({"name":"liming", "password":"123456", "userTypeId":typedata["user"]});
         cb(null, typedata);
     },
     //系统可用的cmd码

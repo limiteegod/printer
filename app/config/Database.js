@@ -76,12 +76,12 @@ var user = new Table("user", [
     new Column("_id", "int", 11, false, undefined, true, true),
     new Column("name", "varchar", 40, false, undefined),
     new Column("password", "varchar", 80, false, undefined),
-    new Column("typeId", "int", 11, false, undefined)
+    new Column("userTypeId", "varchar", 20, false, undefined)
 ]);
 db.put(user);
 //角色表
 var userType = new Table("userType", [
-    new Column("_id", "int", 11, false, undefined, true, true),
+    new Column("_id", "varchar", 20, false, undefined, true, false),
     new Column("name", "varchar", 40, false, undefined)
  ]);
 db.put(userType);
@@ -95,7 +95,7 @@ db.put(operation);
 //角色可用操作表
 var userOperation = new Table("userOperation", [
     new Column("_id", "int", 11, false, undefined, true, true),
-    new Column("userTypeId", "int", 40, false),
+    new Column("userTypeId", "varchar", 20, false),
     new Column("operationId", "int", 11, false)
 ]);
 db.put(userOperation);
@@ -110,7 +110,7 @@ db.put(cmd);
 var userCmd = new Table("userCmd", [
     new Column("_id", "int", 11, false, undefined, true, true),
     new Column("cmdCode", "varchar", 40, false),
-    new Column("userTypeId", "int", 11, false)
+    new Column("userTypeId", "varchar", 20, false)
 ]);
 db.put(userCmd);
 module.exports = db;

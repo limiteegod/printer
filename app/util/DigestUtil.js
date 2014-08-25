@@ -15,12 +15,11 @@ DigestUtil.prototype.getIv = function()
 }
 
 //解密
-DigestUtil.prototype.check = function(headNode, bodyStr)
+DigestUtil.prototype.check = function(headNode, key, bodyStr)
 {
     var self = this;
     if(headNode.digestType == "3des")
     {
-        var key = headNode.digest;
         console.log(bodyStr);
         var decipher = crypto.createDecipheriv('des-ede3-cfb', new Buffer(key, "base64"), self.getIv());
         var dec = decipher.update(bodyStr, 'base64', 'utf8');
@@ -31,7 +30,7 @@ DigestUtil.prototype.check = function(headNode, bodyStr)
 };
 
 //加密
-DigestUtil.prototype.generate = function(headNode, bodyStr)
+DigestUtil.prototype.generate = function(headNode, key, bodyStr)
 {
     console.log(bodyStr);
     var self = this;
@@ -39,13 +38,20 @@ DigestUtil.prototype.generate = function(headNode, bodyStr)
     var msgNode = {head:backHeadNode, body:bodyStr};
     if(headNode.digestType == "3des")
     {
-        var key = headNode.digest;
         var cipher = crypto.createCipheriv('des-ede3-cfb', new Buffer(key, "base64"), self.getIv());
         var crypted = cipher.update(bodyStr, 'utf8', 'base64');
         crypted += cipher.final('base64');
         msgNode.body = crypted;
     }
     return msgNode;
+};
+
+//md5
+DigestUtil.prototype.md5 = function(text)
+{
+    var hasher=crypto.createHash("md5");
+    hasher.update(text);
+    return hasher.digest('hex'); //hashmsg为加密之后的数据
 };
 
 DigestUtil.prototype.getEmptyKey = function()
