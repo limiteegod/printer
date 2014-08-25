@@ -113,3 +113,42 @@ CurSite.getCookie = function(name)
 {
     alert(document.cookie);
 };
+CurSite.setCookie = function(name, value, expSeconds)
+{
+    var exp = new Date();
+    exp.setTime(exp.getTime() + expSeconds*1000);
+    document.cookie = name + "="+ value + ";expires=" + exp.toGMTString();
+};
+CurSite.getDefualtKey = function()
+{
+    return "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+};
+CurSite.getDefaultIv = function()
+{
+    return "AAAAAAAAAAA=";
+};
+
+CurSite.encrypt = function(headNode, key, bodyStr)
+{
+    if(!key)
+    {
+        key = CurSite.getDefualtKey();
+    }
+    var arrayKey = CryptoJS.enc.Base64.parse(key);
+    var iv  = CryptoJS.enc.Base64.parse(CurSite.getDefaultIv());
+    var encrypted = CryptoJS.TripleDES.encrypt(bodyStr, arrayKey, {iv:iv, mode:CryptoJS.mode.CFB, padding: CryptoJS.pad.NoPadding}) + "";
+    alert(encrypted);
+    return {head:headNode, body:encrypted};
+};
+
+CurSite.decrypt = function(headNode, key, encodedBodyStr)
+{
+    if(!key)
+    {
+        key = CurSite.getDefualtKey();
+    }
+    var arrayKey = CryptoJS.enc.Base64.parse(key);
+    var iv  = CryptoJS.enc.Base64.parse(CurSite.getDefaultIv());
+    var decrypted = CryptoJS.TripleDES.decrypt(encodedBodyStr, arrayKey, {iv:iv, mode:CryptoJS.mode.CFB, padding: CryptoJS.pad.NoPadding});
+    return decrypted.toString(CryptoJS.enc.Utf8);
+};
