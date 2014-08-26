@@ -17,5 +17,8 @@ platform.site = {
 platform.ver = "s.1.01";
 exports.platform = platform;
 
+//if user hasn't operation in half a hour, the key will be expired.
+exports.loginExpiredSeconds = 30*60;
+
 
 

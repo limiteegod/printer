@@ -92,6 +92,69 @@ Table.prototype.save = function(data, cb)
 };
 
 /**
+ * get update string by json data object.
+ * @param data
+ * @returns {string}
+ */
+Table.prototype.getUpdateStr = function(data)
+{
+    var self = this;
+    var pStr = "";
+    var kCount = 0;
+    for(var key in data) {
+        var keyArray = key.match(/\$([a-z]+)/);
+        if (keyArray)
+        {
+            if (keyArray[1] == 'set')
+            {
+                var setData = data[key];
+                for(var setKey in setData)
+                {
+                    var col = self.colList[setKey];
+                    if(col == undefined)
+                    {
+                        //如果没有相关的列，则直接忽略
+                        continue;
+                    }
+                    else
+                    {
+                        if(kCount > 0)
+                        {
+                            pStr += ",";
+                        }
+                        pStr += self.getKvPair(col, "=", setData[setKey]);
+                        kCount++;
+                    }
+                }
+            }
+        }
+    }
+    return pStr;
+};
+
+/**
+ * excute update operation
+ */
+Table.prototype.update = function(condition, data, cb)
+{
+    var self = this;
+    var sql = "update " + self.name + " set ";
+    sql += self.getUpdateStr(data);
+    var conditionStr = self.condition(condition);
+    if(conditionStr.length > 0)
+    {
+        sql += " where " + conditionStr;
+    }
+    console.log(sql);
+    dbPool.conn.query(sql, function(err, rows, fields) {
+        if(cb != undefined)
+        {
+            cb(err, rows, data);
+        }
+    });
+};
+
+/**
  * 根据json格式的数据生成查询条件
  * @param data
  */
@@ -206,7 +269,7 @@ Table.prototype.getKvPair = function(col, op, value)
     else
     {
         var exp = col.getName() + " " + op + " ";
-        if(col.getType() == 'int')
+        if(col.getType() == 'int' || col.getType() == "bigint")
         {
             exp += value;
         }
@@ -263,7 +326,6 @@ Table.prototype.find = function(data, columns)
     {
         sql += " where " + conditionStr;
     }
-    console.log(sql);
     return new DbCursor(sql);
     /*for(var key in data)
     {
