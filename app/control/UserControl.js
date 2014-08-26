@@ -88,7 +88,31 @@ UserControl.prototype.handle = function(headNode, bodyStr, userCb)
     //user query
     else if(headNode.cmd == 'A02')
     {
+        async.waterfall([
+            //get st from stInfo
+            function(cb){
+                var stInfoTable = db.get("stInfo");
+                stInfoTable.find({_id:headNode.userId}, {lastActiveTime:1, st:1}).toArray(function(err, stInfoData){
+                    if(stInfoData.length == 0)
+                    {
+                        userCb(null, errCode.E0005);
+                    }
+                    else
+                    {
+                        var now = new Date();
+                        if(now.getTime() - stInfoData[0].lastActiveTime > prop.loginExpiredSeconds*1000)
+                        {
+                            //expired
+                            userCb(null, errCode.E0005);
+                        }
+                        else
+                        {
 
+                        }
+                    }
+                });
+            }
+        ]);
     }
 }
 
