@@ -9,7 +9,7 @@ var InitDatabase = function(){};
 InitDatabase.prototype.saveUserType = function(data, outerCb){
     var rstArray = new Array();
     async.each(data, function(row, callback) {
-        userTypeTable.save(row, function(rows, data){
+        userTypeTable.save(row, function(err, rows, data){
             rstArray[data.code] = data._id;
             callback();
         });
@@ -24,7 +24,7 @@ InitDatabase.prototype.saveUserType = function(data, outerCb){
 
 InitDatabase.prototype.saveOneOperation = function(data, cb)
 {
-    operationTable.save(data, function(rows){
+    operationTable.save(data, function(err, rows){
         cb({"code":data["code"], "_id":rows.insertId});
         var children = data["children"];
         for(var key in children)
@@ -32,7 +32,7 @@ InitDatabase.prototype.saveOneOperation = function(data, cb)
             var child = children[key];
             child["parentId"] = rows.insertId;
             var childFunc = function(child){
-                operationTable.save(child, function(rows){
+                operationTable.save(child, function(err, rows){
                     cb({"code":child["code"], "_id":rows.insertId});
                 });
             };

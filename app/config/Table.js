@@ -1,9 +1,10 @@
 var dbPool = require('./DbPool.js');
 var DbCursor = require('./DbCursor.js');
 
-var Table = function(name, colList){
+var Table = function(name, engine, colList){
     var self = this;
     self.name = name;
+    self.engine = engine;
     self.colList = new Array();
     for(var key in colList)
     {
@@ -83,10 +84,9 @@ Table.prototype.save = function(data, cb)
     sql += keyStr + ") values(" + valueStr + ");";
     console.log(sql);
     dbPool.conn.query(sql, function(err, rows, fields) {
-        if (err) throw err;
         if(cb != undefined)
         {
-            cb(rows, data);
+            cb(err, rows, data);
         }
     });
 };

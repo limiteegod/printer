@@ -75,7 +75,11 @@ Column.prototype.isAuto_increment = function()
 Column.prototype.toString = function()
 {
     var self = this;
-    var sql = self.name + " " + self.type + "(" + self.length + ")";
+    var sql = self.name + " " + self.type;
+    if(self.type != 'date' && self.type != 'bigint')
+    {
+        sql += "(" + self.length + ")";
+    }
     if(!self.nullable)
     {
         sql += " not null";

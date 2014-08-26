@@ -72,7 +72,7 @@ Database.prototype.create = function(cb)
 
 var db = new Database();
 //用户表
-var user = new Table("user", [
+var user = new Table("user", "mysql", [
     new Column("_id", "int", 11, false, undefined, true, true),
     new Column("name", "varchar", 40, false, undefined),
     new Column("password", "varchar", 80, false, undefined),
@@ -80,39 +80,51 @@ var user = new Table("user", [
 ]);
 db.put(user);
 //角色表
-var userType = new Table("userType", [
+var userType = new Table("userType", "mysql", [
     new Column("_id", "varchar", 20, false, undefined, true, false),
     new Column("name", "varchar", 40, false, undefined)
  ]);
 db.put(userType);
 //可用操作表
-var operation = new Table("operation", [
+var operation = new Table("operation", "mysql", [
     new Column("_id", "int", 11, false, undefined, true, true),
     new Column("name", "varchar", 40, false, undefined),
     new Column("url", "varchar", 100, false, ""),
     new Column("parentId", "int", 11, false, -1)]);
 db.put(operation);
 //角色可用操作表
-var userOperation = new Table("userOperation", [
+var userOperation = new Table("userOperation", "mysql", [
     new Column("_id", "int", 11, false, undefined, true, true),
     new Column("userTypeId", "varchar", 20, false),
     new Column("operationId", "int", 11, false)
 ]);
 db.put(userOperation);
 //接口表
-var cmd = new Table("cmd", [
+var cmd = new Table("cmd", "mysql", [
     new Column("_id", "int", 11, false, undefined, true, true),
     new Column("code", "varchar", 40, false),
     new Column("des", "varchar", 100, false)
 ]);
 db.put(cmd);
 //用户权限表
-var userCmd = new Table("userCmd", [
+var userCmd = new Table("userCmd", "mysql", [
     new Column("_id", "int", 11, false, undefined, true, true),
     new Column("cmdCode", "varchar", 40, false),
     new Column("userTypeId", "varchar", 20, false)
 ]);
 db.put(userCmd);
+//uniqueid of msg
+var uniqueId = new Table("uniqueId", "mysql", [
+    new Column("_id", "varchar", 32, false, undefined, true, false)
+]);
+db.put(uniqueId);
+//st infomation
+var stInfo = new Table("stInfo", "mysql", [
+    new Column("_id", "varchar", 40, false, undefined, true, false),
+    new Column("lastActiveTime", "bigint", -1, false, undefined),
+    new Column("st", "varchar", 32, false, undefined)
+]);
+db.put(stInfo);
 module.exports = db;
 
 

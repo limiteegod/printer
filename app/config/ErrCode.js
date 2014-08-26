@@ -5,5 +5,6 @@ var ErrCode = function()
     self.E0001 = {code:"0001", description:"参数错误"};
     self.E0002 = {code:"0002", description:"user not exists"};
     self.E0003 = {code:"0003", description:"wrong name or wrong password."};
+    self.E0004 = {code:"0004", description:"message has expired"};
 };
 module.exports = new ErrCode();

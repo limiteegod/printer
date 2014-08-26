@@ -2,6 +2,7 @@ var digestUtil = require("../util/DigestUtil.js");
 var userControl = require("./UserControl.js");
 var db = require('../config/Database.js');
 var errCode = require('../config/ErrCode.js');
+var uniqueIdService = require('../service/UniqueIdService.js');
 
 var CmdFactory = function(){};
 
@@ -24,9 +25,37 @@ CmdFactory.prototype.handle = function(headNode, bodyStr, cb)
                 var password = data[0].password;
                 var key = digestUtil.md5(password);
                 var decodedBodyStr = digestUtil.check(headNode, key, bodyStr);
-                var bodyNode = JSON.parse(decodedBodyStr);
-                console.log("decodedBodyStr:" + decodedBodyStr);
-                cb(err, {});
+                try {
+                    var bodyNode = JSON.parse(decodedBodyStr);
+                    uniqueIdService.exists(bodyNode.uniqueId, function(err, data){
+                        if(err)
+                        {
+                            cb(null, errCode.E0004);
+                        }
+                        else
+                        {
+                            headNode.key = key;
+                            var stInfoTable = db.get("stInfo");
+                            stInfoTable.find({_id:headNode.userId}, {lastActiveTime:1, st:1}).toArray(function(err, stInfoData){
+                                if(stInfoData.length == 0)
+                                {
+                                    var st = digestUtil.createUUID();
+                                    stInfoTable.save({_id:headNode.userId, st:st, lastActiveTime:new Date().getTime()});
+                                    cb(null, {uniqueId:bodyNode.uniqueId, st:st});
+                                }
+                                else
+                                {
+                                    cb(null, {uniqueId:bodyNode.uniqueId, st:stInfoData[0].st});
+                                }
+                            });
+                        }
+                    });
+                }
+                catch (err)
+                {
+                    cb(err, errCode.E0003);
+                    return;
+                }
             }
         });
     }

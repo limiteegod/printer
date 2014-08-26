@@ -2,6 +2,7 @@ var express = require('express'), app = express();
 var cmdFactory = require("./app/control/CmdFactory.js");
 var pageControl = require("./app/control/PageControl.js");
 var errCode = require("./app/config/ErrCode.js");
+var digestUtil = require("./app/util/DigestUtil.js");
 
 
 app.use(express.logger());
@@ -65,7 +66,17 @@ app.post("/main/interface.htm", function(req, res){
             bodyNode.code = errCode.E0000.code;
             bodyNode.description = errCode.E0000.description;
         }
-        res.json(bodyNode);
+        if(headNode.key)
+        {
+            var decodedBodyStr = digestUtil.generate(headNode, headNode.key, JSON.stringify(bodyNode));
+            headNode.key = undefined;
+            res.json({head:headNode, body:decodedBodyStr});
+        }
+        else
+        {
+            headNode.digestType = undefined;
+            res.json({head:headNode, body:JSON.stringify(bodyNode)});
+        }
     });
 });
 
