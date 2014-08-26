@@ -19,7 +19,9 @@ html(lang="en")
                             var backBodyStr = data.body;
                             var decodedBodyStr = CurSite.decrypt(data.head, key, backBodyStr);
                             var backBodyNode = Json.parse(decodedBodyStr);
-                            alert(backBodyNode.st);
+                            CurSite.setCookie("userId", name, 30*60);
+                            CurSite.setCookie("userType", "manager", 30*60);
+                            CurSite.setCookie("st", backBodyNode.st, 30*60);
                             window.location = CurSite.getAbsolutePath("admin_index.html");
                         }
                         else

@@ -106,18 +106,30 @@ CurSite.arrayCopyAndExclude = function(data, index)
     return newArray;
 };
 /**
- * get cookie by name
- * @param name
+ * get cookies
  */
-CurSite.getCookie = function(name)
+CurSite.getCookie = function()
 {
-    alert(document.cookie);
+    var cookieStr = document.cookie;
+    var cookieStrArray = cookieStr.split(";");
+    var siteCookies = {};
+    for(var index in cookieStrArray)
+    {
+        if(cookieStrArray[index].length > 0)
+        {
+            var cookieArray = cookieStrArray[index].split("=");
+            var key = cookieArray[0].trim();
+            var value = cookieArray[1].trim();
+            siteCookies[key] = value;
+        }
+    }
+    return siteCookies;
 };
 CurSite.setCookie = function(name, value, expSeconds)
 {
     var exp = new Date();
     exp.setTime(exp.getTime() + expSeconds*1000);
-    document.cookie = name + "="+ value + ";expires=" + exp.toGMTString();
+    document.cookie = name + "="+ value + ";expires=" + exp.toGMTString() + ";path=/";
 };
 CurSite.getDefualtKey = function()
 {
