@@ -10,19 +10,10 @@ html(lang="en")
                 var body = {uniqueId:CurSite.createUUID()};
                 var msgNode = CurSite.encrypt(headNode, key, Json.stringify(body));
                 Io({type:"post", url:CurSite.interPath, data:{message:Json.stringify(msgNode)}, success:function(data){
-                        if(data.head.digestType)
-                        {
-                            var backBodyStr = data.body;
-                            var decodedBodyStr = CurSite.decrypt(data.head, key, backBodyStr);
-                            alert(decodedBodyStr);
-                            var backBodyNode = Json.parse(decodedBodyStr);
-                        }
-                        else
-                        {
-                            var decodedBodyStr = data.body;
-                            var backBodyNode = Json.parse(decodedBodyStr);
-                            alert(backBodyNode.description);
-                        }
+                        var backBodyStr = data.body;
+                        var decodedBodyStr = CurSite.decrypt(data.head, key, backBodyStr);
+                        alert(decodedBodyStr);
+                        var backBodyNode = Json.parse(decodedBodyStr);
                 }});
             });
     body
