@@ -65,7 +65,7 @@ TerminalControl.prototype.getBodyNode = function(cmd, buf)
     var bodyNode = {};
     if(cmd == "0001")
     {
-        bodyNode.terminalid = buf.toString("utf8", 0, 8);
+        bodyNode.terminalid = buf.toString("gb2312", 0, 8);
         console.log("terminalid:" + bodyNode.terminalid);
     }
     return bodyNode;
