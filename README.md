@@ -1,4 +1,1 @@
-lottery
-=======
-
-lottery
+print lot.
